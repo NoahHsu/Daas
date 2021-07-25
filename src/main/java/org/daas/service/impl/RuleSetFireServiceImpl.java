@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.commons.collections4.iterators.ReverseListIterator;
 import org.daas.bean.KieBaseContainerBean;
 import org.daas.bean.RequestBodyBean;
 import org.daas.bean.config.DaasServiceBean;
@@ -18,6 +19,14 @@ import org.daas.service.RuleSetFireService;
 import org.kie.api.KieBase;
 import org.kie.api.definition.KiePackage;
 import org.kie.api.definition.type.FactType;
+import org.kie.api.event.rule.AfterMatchFiredEvent;
+import org.kie.api.event.rule.AgendaGroupPoppedEvent;
+import org.kie.api.event.rule.AgendaGroupPushedEvent;
+import org.kie.api.event.rule.DefaultAgendaEventListener;
+import org.kie.api.event.rule.DefaultRuleRuntimeEventListener;
+import org.kie.api.event.rule.ObjectInsertedEvent;
+import org.kie.api.event.rule.ObjectUpdatedEvent;
+import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieSession;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -51,6 +60,7 @@ public class RuleSetFireServiceImpl implements RuleSetFireService {
     Map<String, FactType> ansTypeMap = addDefaultFact(factList, codePackageMap, kieBase);
     KieSession session = fireRule(kieBase, factList);
     Map<String, Object> ansData = genAnswerDataMap(ansTypeMap, session);
+    session.dispose();
     return ansData;
   }
 
@@ -160,15 +170,60 @@ public class RuleSetFireServiceImpl implements RuleSetFireService {
 
     List<String> groupAgendaList = kieBase.getDefaultRuleGroup();
     if (!CollectionUtils.isEmpty(groupAgendaList)) {
-      for (String groupName : groupAgendaList) {
-        session.getAgenda().getAgendaGroup(groupName).setFocus();
+      ReverseListIterator<String> reverseListIterator = new ReverseListIterator<>(groupAgendaList);
+      while (reverseListIterator.hasNext()) {
+        session.getAgenda().getAgendaGroup(reverseListIterator.next()).setFocus();
       }
     }
 
+    session.addEventListener(agendaListener());
+    session.addEventListener(runTimeListener());
     int matchRuleNum = session.fireAllRules();
     System.out.println("number of match rule = " + matchRuleNum);
 
     return session;
+  }
+
+  private DefaultAgendaEventListener agendaListener() {
+    return new DefaultAgendaEventListener() {
+      public void agendaGroupPushed(AgendaGroupPushedEvent event) {
+        super.agendaGroupPushed(event);
+        System.out.println("Pushed " + event.getAgendaGroup().getName());// prints the rule name
+                                                                         // that fires
+      }
+
+      public void agendaGroupPopped(AgendaGroupPoppedEvent event) {
+        super.agendaGroupPopped(event);
+        System.out.println("Pop" + event.getAgendaGroup().getName());// prints the rule name that
+                                                                     // fires
+        // the event
+      }
+
+      // this event will be executed after the rule matches with the model data
+      public void afterMatchFired(AfterMatchFiredEvent event) {
+        super.afterMatchFired(event);
+        System.out.println("Match" + event.getMatch().getRule().getName());// prints the rule name
+                                                                           // that fires
+        // the event
+      }
+    };
+  }
+
+  private RuleRuntimeEventListener runTimeListener() {
+    // TODO Auto-generated method stub
+    return new DefaultRuleRuntimeEventListener() {
+      public void objectInserted(ObjectInsertedEvent event) {
+        super.objectInserted(event);
+        System.out.println("Insert " + event.getObject());
+      }
+
+      // this event will be executed after the rule matches with the model data
+      public void objectUpdated(ObjectUpdatedEvent event) {
+        super.objectUpdated(event);
+        System.out.println("[" + event.getRule().getName() + "] = " + event.getOldObject() + " => "
+            + event.getObject());
+      }
+    };
   }
 
   public Map<String, Object> genAnswerDataMap(Map<String, FactType> ansCodeModelMap,
