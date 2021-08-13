@@ -2,6 +2,8 @@ package org.daas.controller.impl;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.daas.bean.KieBaseContainerBean;
 import org.daas.bean.RequestBodyBean;
 import org.daas.bean.ResponseBodyBean;
@@ -48,12 +50,6 @@ public class RuleControllerImpl implements RuleController {
   }
 
   @Override
-  public ResponseEntity<String> buildRule(String apiCode, String version) {
-    // TODO Auto-generated method stub
-    return ResponseEntity.ok().body("Build Target:" + apiCode + "-" + version);
-  }
-
-  @Override
   public ResponseEntity<KieBaseContainerBean> checkRule(String apiCode, String version) {
     String key = kieBaseBuildService.kieBaseKey(apiCode, version);
     Optional<KieBaseContainerBean> bean = kieBaseContainerService.getKieBase(key);
@@ -62,6 +58,14 @@ public class RuleControllerImpl implements RuleController {
     } else {
       return ResponseEntity.notFound().build();
     }
+  }
+
+  @Override
+  public ResponseEntity<Map<String, KieBaseContainerBean>> checkRule() {
+    Map<String, KieBaseContainerBean> kieBases =
+        kieBaseContainerService.getKieBaseIdSet().stream().collect(Collectors
+            .toMap(Function.identity(), id -> kieBaseContainerService.getKieBase(id).get()));
+    return ResponseEntity.ok(kieBases);
   }
 
 }

@@ -6,6 +6,9 @@ import static org.daas.utils.FileStringReader.readFileBytes;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -117,13 +120,24 @@ public class KieBaseBuildServiceImpl implements KieBaseBuildService {
   }
 
   private String deviceFilePath(DaasResourceBean drl) throws FileNotFoundException {
-    String file = toFielPath(parsePackage(drl.getPackageName()), drl.getCode(), drl.getVersion(),
-        drl.getCode() + ACCPEPT_EXTENSION);
-    for (String filePrefix : fileConfig.getFilePaths()) {
-      String fileName = toFielPath(filePrefix, file);
-      System.out.println("find file at : " + fileName);
-      if (new File(fileName).isFile()) {
-        return fileName;
+    String filePath = toFielPath(parsePackage(drl.getPackageName()), drl.getCode(),
+        drl.getVersion(), drl.getCode() + ACCPEPT_EXTENSION);
+    for (String repoPath : fileConfig.getFilePaths()) { // find in define path
+      String fullFilePath = toFielPath(repoPath, filePath);
+      System.out.println("find file at : " + fullFilePath);
+      if (new File(fullFilePath).isFile()) {
+        return fullFilePath;
+      }
+    }
+    for (String repoPath : fileConfig.getFilePaths()) { // find in classpath
+      String fullFilePath = toFielPath(repoPath, filePath);
+      try {
+        System.out.println("in classpath");
+        Path a = Paths.get(ClassLoader.getSystemResource(fullFilePath).toURI());
+        System.out.println("path" + a);
+        return a.toString();
+      } catch (URISyntaxException e) {
+        throw new FileNotFoundException();
       }
     }
     throw new FileNotFoundException();

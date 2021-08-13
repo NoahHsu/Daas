@@ -1,0 +1,41 @@
+package org.daas.demo.rule
+
+import org.daas.demo.fact.Person;
+import org.daas.demo.fact.AnswerInfo;
+import java.math.BigDecimal;
+
+rule "Vip-1-3"
+agenda-group "vip-rule"
+activation-group "vip-rule"
+no-loop true
+	when
+		$p : Person( vipLevel <=3, vipLevel > 0 );
+		$ans : AnswerInfo();
+	then
+		$ans.setPrice(BigDecimal.valueOf($ans.getPrice()).multiply(BigDecimal.valueOf(0.3)).doubleValue());
+		update($ans);
+end
+
+rule "Vip-4-7"
+agenda-group "vip-rule"
+activation-group "vip-rule"
+no-loop true
+	when
+		$p : Person( vipLevel <=7, vipLevel > 3 );
+		$ans : AnswerInfo();
+	then
+		$ans.setPrice(BigDecimal.valueOf($ans.getPrice()).multiply(BigDecimal.valueOf(0.2)).doubleValue());
+		update($ans);
+end
+
+rule "Vip-7-"
+agenda-group "vip-rule"
+activation-group "vip-rule"
+no-loop true
+	when
+		$p : Person( vipLevel > 7 );
+		$ans : AnswerInfo();
+	then
+		$ans.setPrice(BigDecimal.valueOf($ans.getPrice()).multiply(BigDecimal.valueOf(0.1)).doubleValue());
+		update($ans);
+end

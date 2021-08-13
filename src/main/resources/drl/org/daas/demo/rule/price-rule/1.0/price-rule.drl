@@ -1,0 +1,31 @@
+package org.daas.demo.rule
+
+import org.daas.demo.fact.Person;
+import org.daas.demo.fact.AnswerInfo;
+
+
+rule "child-price"
+agenda-group "price-rule"
+activation-group "price-rule"
+no-loop true
+	when
+		$p : Person( age < 18);
+		$ans : AnswerInfo();
+	then
+		$ans.setIsIllegal(true);
+		$ans.setPrice(200);
+		update($ans);
+end
+
+rule "adualt-price"
+agenda-group "price-rule"
+activation-group "price-rule"
+no-loop true
+when
+		$p : Person( age >= 18);
+		$ans : AnswerInfo();
+	then
+		$ans.setIsIllegal(false);
+		$ans.setPrice(300);
+		update($ans);
+end

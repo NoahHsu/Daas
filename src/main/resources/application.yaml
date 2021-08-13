@@ -2,29 +2,50 @@ server:
   port: 8080
 drl-repo:
   file-paths:
-  - /Users/xuziting/RuleEngine/drl
-dass-service:
+  - drl
+daas-service:
   services:
-  - category: test
-    code: api1
-    version: sit-1.0.0
-    effetiveDateTime: 2021-07-01 20:21:00
-    ineffetiveDateTime: 2021-07-02 20:21:00
+  - code: demo
+    version: 1.0.0
+    effetiveDateTime: 2021-07-01 00:00:00
+    ineffetiveDateTime: 2021-07-31 23:59:59
     rules:
-    - package-name: com.noah.demo.rule
+    - package-name: org.daas.demo.rule
       code: price-rule
       version: 1.0
       priority: 100
-    - package-name: com.noah.demo.rule
+    - package-name: org.daas.demo.rule
       code: vip-rule
       version: 1.0
       priority: 80
     inputs:
-    - package-name: com.noah.demo.fact
+    - package-name: org.daas.demo.fact
       code: Person
       version: 1.0
     outputs:
-    - package-name: com.noah.demo.fact
+    - package-name: org.daas.demo.fact
+      code: AnswerInfo
+      version: 1.0
+      default-num: 1
+  - code: demo
+    version: 2.0.0
+    effetiveDateTime: 2021-08-01 00:00:00
+    ineffetiveDateTime: 2021-08-30 23:59:59
+    rules:
+    - package-name: org.daas.demo.rule
+      code: price-rule
+      version: 1.0
+      priority: 100
+    - package-name: org.daas.demo.rule
+      code: vip-rule
+      version: 2.0
+      priority: 80
+    inputs:
+    - package-name: org.daas.demo.fact
+      code: Person
+      version: 1.0
+    outputs:
+    - package-name: org.daas.demo.fact
       code: AnswerInfo
       version: 1.0
       default-num: 1

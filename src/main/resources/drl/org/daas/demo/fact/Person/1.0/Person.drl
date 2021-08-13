@@ -1,0 +1,8 @@
+package org.daas.demo.fact
+
+declare Person
+    age : Integer
+    vipLevel : Integer
+    lastName : String
+    firstName : String
+end

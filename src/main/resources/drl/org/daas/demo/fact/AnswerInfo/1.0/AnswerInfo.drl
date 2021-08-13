@@ -1,0 +1,6 @@
+package org.daas.demo.fact;
+
+declare AnswerInfo
+	isIllegal : boolean
+	price : double	
+end

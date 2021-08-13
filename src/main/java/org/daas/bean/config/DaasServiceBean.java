@@ -6,7 +6,6 @@ import java.util.List;
 import org.daas.utils.DateTimeUtils;
 
 public class DaasServiceBean {
-  private String category;
   private String code;
   private String version;
   private LocalDateTime effetiveDateTime;
@@ -15,14 +14,6 @@ public class DaasServiceBean {
   private List<InputFcatModelBean> inputs = new ArrayList<>();
   private List<DefatulFactModelBean> outputs = new ArrayList<>();
   private List<DefatulFactModelBean> temps = new ArrayList<>();
-
-  public String getCategory() {
-    return category;
-  }
-
-  public void setCategory(String category) {
-    this.category = category;
-  }
 
   public String getCode() {
     return code;

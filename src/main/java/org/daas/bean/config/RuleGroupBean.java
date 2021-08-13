@@ -1,6 +1,5 @@
 package org.daas.bean.config;
 
-import java.math.BigDecimal;
 import org.daas.bean.config.abs.DaasResourceBean;
 
 public class RuleGroupBean extends DaasResourceBean {
@@ -10,7 +9,6 @@ public class RuleGroupBean extends DaasResourceBean {
   private Integer priority;
 
   public Integer getPriority() {
-    BigDecimal.valueOf(150).multiply(BigDecimal.valueOf(0.7)).doubleValue();
     return priority;
   }
 

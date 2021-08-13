@@ -2,54 +2,33 @@ package org.daas.bean;
 
 public class ResponseInfoBean {
 
-	private String returnCode;
+  private String returnCode;
 
-	private String returnMessage;
+  private String returnMessage;
 
-	private String apiLogId;
+  public ResponseInfoBean() {
+    super();
+  }
 
-	private String ruleSetId;
+  public String getReturnCode() {
+    return returnCode;
+  }
 
-	public ResponseInfoBean() {
-		super();
-	}
+  public void setReturnCode(String returnCode) {
+    this.returnCode = returnCode;
+  }
 
-	public String getReturnCode() {
-		return returnCode;
-	}
+  public String getReturnMessage() {
+    return returnMessage;
+  }
 
-	public void setReturnCode(String returnCode) {
-		this.returnCode = returnCode;
-	}
+  public void setReturnMessage(String returnMessage) {
+    this.returnMessage = returnMessage;
+  }
 
-	public String getReturnMessage() {
-		return returnMessage;
-	}
+  @Override
+  public String toString() {
+    return "ResponseInfoBean [returnCode=" + returnCode + ", returnMessage=" + returnMessage + "]";
+  }
 
-	public void setReturnMessage(String returnMessage) {
-		this.returnMessage = returnMessage;
-	}
-
-	public String getApiLogId() {
-		return apiLogId;
-	}
-
-	public void setApiLogId(String apiLogId) {
-		this.apiLogId = apiLogId;
-	}
-
-	public String getRuleSetId() {
-		return ruleSetId;
-	}
-
-	public void setRuleSetId(String ruleSetId) {
-		this.ruleSetId = ruleSetId;
-	}
-
-	@Override
-	public String toString() {
-		return "ResponseInfoBean [returnCode=" + returnCode + ", returnMessage=" + returnMessage + ", apiLogId="
-				+ apiLogId + ", ruleSetId=" + ruleSetId + "]";
-	}
-	
 }
