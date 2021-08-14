@@ -1,12 +1,16 @@
 # DaaS ( Drools as a service)
 
-We try to build a lightwight RESTful API server that can contains Configurable logic,  and do NOT need to coding, rebuild, compile the application. So we create DaaS, which use Drools as the core engine to dynamic compile the logic (.drl, Drools Rule Language ). Then the Application server accept request,  match with the logic and return the answer as reseponce. All the logic change can be done with only writing .drl file and setting the config.
+We try to build a lightwight RESTful API server that can contains Configurable logic,  and do NOT need coding, rebuilding, compilation for the application server. So we create DaaS, which use Drools as the core engine to dynamic compile the logic (use .drl, Drools Rule Language ). Then the Application server accept request,  match with the logic and return the answer as reseponce. All the logic change can be done with only writing .drl file and setting the config.
 
 ## Feature List
 
 1. External application.yaml for API setting
 2. Read External drl
 3. Serve group of drl as an API
+
+## Quick reference
+1. [GitHub repository](https://github.com/NoahHsu/Daas)
+2. [Docker Hub](https://hub.docker.com/repository/docker/noahhsu/daas)
 
 ## Best Practice
 
